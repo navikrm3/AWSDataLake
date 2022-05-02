@@ -1,0 +1,61 @@
+
+
+IAM role for Lambda Functions:  SQS_Lambda which has AmazonSQSFullAccess, AWSGlueServiceRole, AWSLambdaExecute, AWSStepFunctionsConsoleFullAccess, AWSGlueConsoleFullAccess,
+								AWSStepFunctionsFullAccess and one in-line policy as below:
+								{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:UpdateFunctionEventInvokeConfig",
+                "lambda:ListFunctionEventInvokeConfigs",
+                "lambda:InvokeFunctionUrl",
+                "lambda:InvokeFunction",
+                "lambda:GetFunctionEventInvokeConfig",
+                "lambda:PutFunctionEventInvokeConfig",
+                "lambda:InvokeAsync"
+            ],
+            "Resource": "arn:aws:lambda:*:246267001764:function:*"
+        }
+    ]
+}
+
+IAM role for Glue Job and crawlers: AnalyticsworkshopGlueRole  which has SQSFullAccess, S3FullAccess, GlueServiceRole
+
+
+IAM role for SQS notification on S3 :
+{
+  "Version": "2008-10-17",
+  "Id": "__default_policy_ID",
+  "Statement": [
+    {
+      "Sid": "__owner_statement",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::246267001764:root"
+      },
+      "Action": "SQS:*",
+      "Resource": "arn:aws:sqs:ap-south-1:246267001764:sdlfqueueraw"
+    },
+    {
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": [
+        "sqs:SendMessage",
+        "sqs:ReceiveMessage"
+      ],
+      "Resource": "arn:aws:sqs:ap-south-1:246267001764:sdlfqueueraw",
+      "Condition": {
+        "ArnLike": {
+          "aws:SourceArn": "arn:aws:s3:*:*:sdlfrawbucket"
+        }
+      }
+    }
+  ]
+}
+
+
+
+
